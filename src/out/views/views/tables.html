@@ -1,0 +1,46 @@
+<html>
+
+<head>Tables</head>
+
+<body>
+    <div id="allTables">
+
+    </div>
+</body>
+
+</html>
+<script type="text/javascript">
+    var xhr = new XMLHttpRequest();
+    xhr.open("Post", 'localhost:3000/tables'); // false for synchronous request
+    xhr.setRequestHeader("Content-Type", "x-www-form-urlencoded");
+    xhr.send(null);
+    if (this.readyState == 4 && this.status == 200) {
+        var TableList = xhr.responseText;
+    }
+
+    xhr.open('GET', 'http://localhost:3000/tables');
+    xhr.send(null);
+    xhr.openstatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var array = document.getElementById("allTables");
+            while (array.hasChildNodes()) {
+                array.removeChild(array.firstChild);
+            }
+            tables = JSON.parse(TableList);
+            if (table.lenght > 0) {
+                for (var i = 0; i < array.lenght; i++) {
+                    var table = document.createElement("Table");
+                    var rowId = table.insertRow(0);
+                    var cell1 = rowId.insertCell(0);
+                    var cell2 = rowId.insertCell(1);
+                    cell1.innerHTML = "Table :"
+                    cell2.innerHTML = tables[i].id;
+
+                    document.getElementById("allTables").appendChild(table);
+                }
+            }
+        }
+    }
+
+
+</script>

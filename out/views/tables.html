@@ -1,0 +1,48 @@
+<html>
+
+<head></head>
+
+<body>
+    <div id=allTables>
+
+    </div>
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/tables', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(null);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var TableList = JSON.parse(xhr.responseText);
+                var array = document.getElementById("allTables");
+                while (array.hasChildNodes()) {
+                    array.removeChild(array.firstChild);
+                }
+                if (TableList.length <= 0) {
+                    par = document.createElement("P");
+                    par.innerHTML = "No orders for tables found";
+                } else if (TableList.length > 0) {
+                    for (var i = 0; i < TableList.length; i++) {
+                        var button = document.createElement("button");
+                        button.innerHTML = "Table :" + TableList[i].id;
+                        button.id=i;
+                        button.onclick = (function () {
+                            console.log(this.id);
+                            var xhrTableID = new XMLHttpRequest();
+                            xhrTableID.open('GET', 'http://localhost:3000/tables/'+this.id, true);
+                            xhrTableID.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                            xhrTableID.send(null);
+                        })
+                        document.getElementById("allTables").appendChild(button);
+
+                    }
+                }
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,46 +1,48 @@
 <html>
 
-<head>Tables</head>
+<head></head>
 
 <body>
-    <div id="allTables">
+    <div id=allTables>
 
     </div>
-</body>
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/tables', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(null);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var TableList = JSON.parse(xhr.responseText);
+                var array = document.getElementById("allTables");
+                while (array.hasChildNodes()) {
+                    array.removeChild(array.firstChild);
+                }
+                if (TableList.length <= 0) {
+                    par = document.createElement("P");
+                    par.innerHTML = "No orders for tables found";
+                } else if (TableList.length > 0) {
+                    for (var i = 0; i < TableList.length; i++) {
+                        var button = document.createElement("button");
+                        button.innerHTML = "Table :" + TableList[i].id;
+                        button.id = i;
+                        button.onclick = (function () {
+                            console.log(this.id);
+                            var xhrTableID = new XMLHttpRequest();
+                            xhrTableID.open('GET', 'http://localhost:3000/tables/' + this.id, true);
+                            xhrTableID.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                            xhrTableID.send(null);
+                        })
+                        document.getElementById("allTables").appendChild(button);
 
-</html>
-<script type="text/javascript">
-    var xhr = new XMLHttpRequest();
-    xhr.open("Post", 'localhost:3000/tables'); // false for synchronous request
-    xhr.setRequestHeader("Content-Type", "x-www-form-urlencoded");
-    xhr.send(null);
-    if (this.readyState == 4 && this.status == 200) {
-        var TableList = xhr.responseText;
-    }
-
-    xhr.open('GET', 'http://localhost:3000/tables');
-    xhr.send(null);
-    xhr.openstatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var array = document.getElementById("allTables");
-            while (array.hasChildNodes()) {
-                array.removeChild(array.firstChild);
-            }
-            tables = JSON.parse(TableList);
-            if (table.lenght > 0) {
-                for (var i = 0; i < array.lenght; i++) {
-                    var table = document.createElement("Table");
-                    var rowId = table.insertRow(0);
-                    var cell1 = rowId.insertCell(0);
-                    var cell2 = rowId.insertCell(1);
-                    cell1.innerHTML = "Table :"
-                    cell2.innerHTML = tables[i].id;
-
-                    document.getElementById("allTables").appendChild(table);
+                    }
                 }
             }
         }
-    }
 
 
-</script>
+
+    </script>
+</body>
+
+</html>
