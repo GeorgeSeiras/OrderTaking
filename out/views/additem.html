@@ -1,0 +1,55 @@
+<html>
+<script type="text/javascript">
+    function redirect(last_seg,item) {
+        window.location.replace("http://localhost:3000/orders/" + last_seg + "/" + item);
+    }
+    function getItems() {
+        var seg_str = window.location.pathname;
+        var seg_array = seg_str.split('/');
+        var last_seg = seg_array.pop();
+        if(isNaN(last_seg)){
+            last_seg=seg_array.pop();
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/additem/' + last_seg, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(null);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var allItems = JSON.parse(xhr.responseText);
+                var array = document.getElementById("allItems");
+                while (array.hasChildNodes()) {
+                    array.removeChild(array.firstChild);
+                }
+                if (allItems.length <= 0) {
+                    par = document.createElement("P");
+                    par.innerHTML = "No orders for tables found";
+                } else if (allItems.length > 0) {
+                    var table = document.createElement("table");
+                    for (var i = 0; i < allItems.length; i++) {
+                        var row = document.createElement("tr");
+                        var item = allItems[i];
+                        row.innerHTML += `<button type='button'  onclick=redirect("${last_seg}","${item}")>` + allItems[i] + "</button>"
+
+                        table.appendChild(row);
+                        document.getElementById("allItems").appendChild(table);
+                    }
+                    document.getElementById("allItems").appendChild(table);
+                }
+            }
+        }
+    }
+</script>
+
+<head></head>
+
+<body>
+    <div id="allItems">
+
+    </div>
+    <script type="text/javascript">
+        getItems();
+    </script>
+</body>
+
+</html>

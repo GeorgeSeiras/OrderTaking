@@ -2,8 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.order = void 0;
 class order {
-    constructor(items) {
-        this.items = items;
+    constructor() {
+        this.items = [];
+    }
+    addItem(item) {
+        this.items.push(item);
+    }
+    closeOrder() {
+        while (this.items.length > 0) {
+            this.items.pop;
+        }
     }
 }
 exports.order = order;

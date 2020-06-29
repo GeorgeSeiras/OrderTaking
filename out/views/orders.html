@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <script type="text/javascript">
+        function addItem() {
+            var seg_str = window.location.pathname;
+            var seg_array = seg_str.split('/');
+            var last_seg = seg_array.pop();
+            var second_last_seg = seg_array.pop();
+            window.location.replace("http://localhost:3000/additem/"+second_last_seg+"/" +last_seg);
+        }
+
+        function getOrders() {
+            var seg_str = window.location.pathname;
+            var seg_array = seg_str.split('/');
+            var last_seg = seg_array.pop();
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:3000/orders/" + last_seg);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(null);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var allOrders = xhr.responseText;
+                    var array = document.getElementById("allOrders");
+                    var orders = array.tableOrders;
+                    if (allOrders != null) {
+                        par = document.createElement("P");
+                        par.innerHTML = "No orders for this table";
+                        document.getElementById("allOrders").appendChild(par);
+                    } else if (allOrders.length <= 0) {
+                        par = document.createElement("P");
+                        par.innerHTML = "No orders for this table";
+                        document.getElementById("allOrders").appendChild(par);
+                    } else {
+                        for (var i = 0; i < allOrders.length; i++) {
+                            var table = document.createElement("TABLE");
+                            var rowId = table.insertRow(0);
+                            var cell1 = rowId.insertCell(0);
+                            cell1.innerHTML = allOrders[i];
+                            document.getElementById("queryResults").appendChild(table);
+
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id=allOrders>
+
+    </div>
+    <script type="text/javascript">
+        getOrders();
+    </script>
+    <button onclick="addItem()">ADD ITEMS TO ORDER</button>
+</body>
+
+</html>
