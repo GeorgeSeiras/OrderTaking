@@ -3,15 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.order = void 0;
 class order {
     constructor() {
-        this.items = [];
+        this.items = new Array();
     }
     addItem(item) {
         this.items.push(item);
     }
     closeOrder() {
-        while (this.items.length > 0) {
-            this.items.pop;
-        }
+        this.items.length = 0;
     }
 }
 exports.order = order;

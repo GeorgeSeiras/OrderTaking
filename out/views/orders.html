@@ -7,7 +7,7 @@
             var seg_array = seg_str.split('/');
             var last_seg = seg_array.pop();
             var second_last_seg = seg_array.pop();
-            window.location.replace("http://localhost:3000/additem/"+second_last_seg+"/" +last_seg);
+            window.location.replace("http://localhost:3000/additem/" + second_last_seg + "/" + last_seg);
         }
 
         function getOrders() {
@@ -21,8 +21,8 @@
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var allOrders = xhr.responseText;
+                    console.log(allOrders);
                     var array = document.getElementById("allOrders");
-                    var orders = array.tableOrders;
                     if (allOrders != null) {
                         par = document.createElement("P");
                         par.innerHTML = "No orders for this table";

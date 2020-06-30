@@ -4,22 +4,19 @@ const express = require("express");
 const index_1 = require("./index");
 const index_2 = require("./index");
 const router = express.Router();
-const table1 = new index_1.table(0);
-const table2 = new index_1.table(1);
-const table3 = new index_1.table(2);
-const table4 = new index_1.table(3);
-const table5 = new index_1.table(4);
-const TableList = [table1, table2, table3, table4, table5];
-const ItemList = [];
-for (var key in index_2.Items) {
-    if (isNaN(Number(index_2.Items[key]))) {
-        ItemList.push(index_2.Items[key]);
+index_2.table.createTable(0);
+index_2.table.createTable(1);
+index_2.table.createTable(2);
+var ItemList = [];
+for (var key in index_1.Items) {
+    if (isNaN(Number(index_1.Items[key]))) {
+        ItemList.push(index_1.Items[key]);
     }
 }
 router
     .route("/tables")
     .post((req, res) => {
-    return res.send(JSON.stringify(TableList));
+    return res.send(JSON.stringify(index_2.table.TableList));
 })
     .get((req, res) => {
     return res.sendFile('views/tables.html', { root: __dirname });
@@ -27,13 +24,12 @@ router
 router
     .route('/orders/:tableID/:item?')
     .get((req, res) => {
-    if (!req.params.item == undefined) {
+    if (!(req.params.item == null)) {
         var item = req.params.item;
         if (item != "" && item != undefined) {
             for (var key in ItemList) {
                 if (item.localeCompare(ItemList[key]) == 0) {
-                    var tmpTable = TableList[Number.parseInt(req.params.tableID)];
-                    tmpTable.tableOrder.addItem(item);
+                    index_2.table.TableList[Number.parseInt(req.params.tableID)].tableOrder.addItem(item);
                     break;
                 }
             }
@@ -42,7 +38,12 @@ router
     return res.sendFile('views/orders.html', { root: __dirname });
 })
     .post((req, res) => {
-    return res.send(JSON.stringify(TableList[Number.parseInt(req.params.tableID)]));
+    if (index_2.table.TableList[Number.parseInt(req.params.tableID)] != null) {
+        return res.send(JSON.stringify(index_2.table.TableList[Number.parseInt(req.params.tableID)]));
+    }
+    else {
+        return res.send(null);
+    }
 });
 router
     .route("/additem/:tableID/:item?")

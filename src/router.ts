@@ -1,16 +1,14 @@
 import * as express from "express";
-import { order, table } from "./index";
 import { Items } from "./index";
+import {order, table } from "./index";
+import {connection} from "./index";
 const router = express.Router();
 
-const table1 = new table(0);
-const table2 = new table(1);
-const table3 = new table(2);
-const table4 = new table(3);
-const table5 = new table(4);
+table.createTable(0);
+table.createTable(1);
+table.createTable(2);
 
-const TableList: Array<table> = [table1, table2, table3, table4, table5];
-const ItemList: Array<string> = [];
+var ItemList: Array<string> = [];
 for (var key in Items) {
     if (isNaN(Number(Items[key]))) {
         ItemList.push(Items[key]);
@@ -20,7 +18,7 @@ for (var key in Items) {
 router
     .route("/tables")
     .post((req, res) => {
-        return res.send(JSON.stringify(TableList));
+        return res.send(JSON.stringify(table.TableList));
     })
     .get((req, res) => {
         return res.sendFile('views/tables.html', { root: __dirname });
@@ -29,13 +27,12 @@ router
 router
     .route('/orders/:tableID/:item?')
     .get((req, res) => {
-        if (!req.params.item == undefined) {
+        if (!(req.params.item == null)) {
             var item = req.params.item;
             if (item != "" && item != undefined) {
                 for (var key in ItemList) {
                     if (item.localeCompare(ItemList[key]) == 0) {
-                        var tmpTable = TableList[Number.parseInt(req.params.tableID)].tableOrder.addItem(item);
-                        tmpTable.tableOrder.addItem(item);
+                        table.TableList[Number.parseInt(req.params.tableID)].tableOrder.addItem(item);
                         break;
                     }
                 }
@@ -45,8 +42,12 @@ router
 
     })
     .post((req, res) => {
-            return res.send(JSON.stringify(TableList[Number.parseInt(req.params.tableID)]));
-        
+        if (table.TableList[Number.parseInt(req.params.tableID)] != null) {
+            return res.send(JSON.stringify(table.TableList[Number.parseInt(req.params.tableID)]));
+        } else {
+            return res.send(null);
+        }
+
     })
 
 router

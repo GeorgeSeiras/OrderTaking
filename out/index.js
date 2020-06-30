@@ -6,4 +6,6 @@ var table_1 = require("./table");
 Object.defineProperty(exports, "table", { enumerable: true, get: function () { return table_1.table; } });
 var items_1 = require("./items");
 Object.defineProperty(exports, "Items", { enumerable: true, get: function () { return items_1.Items; } });
+var db_1 = require("./db");
+Object.defineProperty(exports, "connection", { enumerable: true, get: function () { return db_1.connection; } });
 //# sourceMappingURL=index.js.map

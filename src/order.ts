@@ -1,18 +1,23 @@
-export class order{
-  items:Array<string>;
+import { connection } from "./index";
+export class order {
+  items: Array<string> = new Array();
 
-  constructor(){
-    this.items = [];
-
+  constructor() {
   }
 
-  addItem(item:string){
-    this.items.push(item);
+  public addToOrder(item: string) {
+    connection.query('INSERT INTO orders (item) VALUES (' + item + ');', (err, result) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
-  closeOrder() {
-    while(this.items.length>0){
-        this.items.pop;
-    }
-}
+  public closeOrder(tableID: number) {
+    connection.query('DELETE FROM orders WHERE tableID=' + tableID + ';', (err, result) => {
+      if (err) {
+        throw err;
+      }
+    });
+  }
 }
