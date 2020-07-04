@@ -11,9 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('webpage'));
 
 
-app.get("/", (req, res) => {
-    return res.redirect("/tables");
-});
+
 
 
 app.listen(3000, () => {

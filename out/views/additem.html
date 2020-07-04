@@ -1,7 +1,7 @@
 <html>
 <script type="text/javascript">
-    function redirect(last_seg,item) {
-        window.location.replace("http://localhost:3000/orders/" + last_seg + "/" + item);
+    function redirect(id,item) {
+        window.location.replace("http://localhost:3000/orders/" + id + "/" + item );
     }
     function getItems() {
         var seg_str = window.location.pathname;
@@ -32,7 +32,6 @@
                         row.innerHTML += `<button type='button'  onclick=redirect("${last_seg}","${item}")>` + allItems[i] + "</button>"
 
                         table.appendChild(row);
-                        document.getElementById("allItems").appendChild(table);
                     }
                     document.getElementById("allItems").appendChild(table);
                 }

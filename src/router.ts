@@ -1,14 +1,13 @@
+import { mongoose } from "./index";
 import * as express from "express";
 import { Items } from "./index";
-import {order, table } from "./index";
-import {connection} from "./index";
+import { order, table } from "./index";
 const router = express.Router();
-
-table.createTable(0);
-table.createTable(1);
-table.createTable(2);
-
 var ItemList: Array<string> = [];
+
+var tableHelper: table = new table();
+var orderhelper = new order();
+
 for (var key in Items) {
     if (isNaN(Number(Items[key]))) {
         ItemList.push(Items[key]);
@@ -16,9 +15,15 @@ for (var key in Items) {
 }
 
 router
+    .route("/")
+    .get((req, res) => {
+        return res.redirect("/tables");
+    });
+router
     .route("/tables")
-    .post((req, res) => {
-        return res.send(JSON.stringify(table.TableList));
+    .post(async (req, res) => {
+        var tables = await tableHelper.getAllTables();
+        return res.send(JSON.stringify(tables));
     })
     .get((req, res) => {
         return res.sendFile('views/tables.html', { root: __dirname });
@@ -27,12 +32,13 @@ router
 router
     .route('/orders/:tableID/:item?')
     .get((req, res) => {
-        if (!(req.params.item == null)) {
-            var item = req.params.item;
+        var item = req.params.item;
+        var tableID = Number.parseInt(req.params.tableID);
+        if (item != null) {
             if (item != "" && item != undefined) {
                 for (var key in ItemList) {
                     if (item.localeCompare(ItemList[key]) == 0) {
-                        table.TableList[Number.parseInt(req.params.tableID)].tableOrder.addItem(item);
+                        var done = order.addToOrder(item, tableID);
                         break;
                     }
                 }
@@ -41,11 +47,15 @@ router
         return res.sendFile('views/orders.html', { root: __dirname });
 
     })
-    .post((req, res) => {
-        if (table.TableList[Number.parseInt(req.params.tableID)] != null) {
-            return res.send(JSON.stringify(table.TableList[Number.parseInt(req.params.tableID)]));
-        } else {
+    .post(async (req, res) => {
+        var item: string = req.params.item;;
+        var tableID: number = Number(req.params.tableID);
+        if (item === "closeOrder") {
+            order.closeOrder(tableID);
             return res.send(null);
+        } else {
+            var orders = await orderhelper.getOrders(tableID);
+            return res.send(JSON.stringify(orders));
         }
 
     })

@@ -1,26 +1,30 @@
 import { order } from "./index";
-import {connection} from "./index";
+import {mongoose,TableModel} from "./index";
 
 export class table {
-    static TableList: Array<table> =[];
     public id: number;
     public tableOrder: order;
-    constructor(id: number) {
+    constructor(id?: number) {
         this.id = id;
         this.tableOrder = new order();
     }
-
-    static createTable(id:number){
-        connection.query('SELECT id FROM tables WHERE id='+id+';',(err,result)=>{
-            if(result.length == 0 ){
-                connection.query('INSERT INTO tables (id) VALUES ('+id+');',(err,result)=>{
-                    if(err){
-                        throw err;
-                    }
-                });
-            }
-        });
-        
+    
+    public async createTable(id:number){
+      var newTable = new TableModel({
+          tableID:id
+      });
+     return  newTable.save(function(err,TableModel){
+        if(err){
+            console.log(err);
+        }
+      });
+    }
+    public async getAllTables(){
+      return TableModel.find({}).sort('tableID');
     }
 
+
+    
 }
+
+  

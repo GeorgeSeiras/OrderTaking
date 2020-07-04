@@ -24,10 +24,10 @@
                 } else if (TableList.length > 0) {
                     for (var i = 0; i < TableList.length; i++) {
                         var button = document.createElement("button");
-                        button.innerHTML = "Table :" + TableList[i].id;
+                        button.innerHTML = "Table :" + TableList[i].tableID;
                         button.id = i;
                         button.onclick = (function () {
-                            window.location.replace("http://localhost:3000/orders/" + this.id);
+                            window.location.replace("http://localhost:3000/orders/" + TableList[this.id].tableID);
                         })
                         document.getElementById("allTables").appendChild(button);
 

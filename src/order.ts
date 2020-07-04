@@ -1,23 +1,41 @@
-import { connection } from "./index";
+import { mongoose, OrderModel } from "./index";
 export class order {
-  items: Array<string> = new Array();
+  public items: Array<string> = new Array();
 
   constructor() {
   }
 
-  public addToOrder(item: string) {
-    connection.query('INSERT INTO orders (item) VALUES (' + item + ');', (err, result) => {
+  private getItems() {
+    return this.items;
+  }
+  private addItems(item: string) {
+    this.items.push(item);
+  }
+  static async addToOrder(item: string, id: number) {
+
+    var newOrder = new OrderModel({
+      tableID: id,
+      item: item
+    });
+    return newOrder.save(function (err, OrderModel) {
       if (err) {
-        throw err;
+        console.log(err);
       }
     });
   }
 
-  public closeOrder(tableID: number) {
-    connection.query('DELETE FROM orders WHERE tableID=' + tableID + ';', (err, result) => {
+  static async closeOrder(tableID: number) {
+    OrderModel.remove({ tableID: tableID }, function (err) {
       if (err) {
-        throw err;
+        console.log(err);
       }
     });
+    return true;
+  }
+
+  public async getOrders(id: number) {
+    return OrderModel.find({
+      tableID: id
+    });;
   }
 }
