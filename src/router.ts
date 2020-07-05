@@ -38,7 +38,7 @@ router
             if (item != "" && item != undefined) {
                 for (var key in ItemList) {
                     if (item.localeCompare(ItemList[key]) == 0) {
-                        var done = order.addToOrder(item, tableID);
+                        var done = orderhelper.addToOrder(item, tableID);
                         break;
                     }
                 }
@@ -51,7 +51,7 @@ router
         var item: string = req.params.item;;
         var tableID: number = Number(req.params.tableID);
         if (item === "closeOrder") {
-            order.closeOrder(tableID);
+            orderhelper.closeOrder(tableID);
             return res.send(null);
         } else {
             var orders = await orderhelper.getOrders(tableID);

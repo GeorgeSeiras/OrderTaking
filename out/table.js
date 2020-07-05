@@ -36,4 +36,5 @@ class table {
     }
 }
 exports.table = table;
+exports.default = table;
 //# sourceMappingURL=table.js.map

@@ -4,7 +4,7 @@
   "description": "",
   "main": "App.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsc test/test.ts && mocha test/test.js --reporter spec",
     "copy": "cp -r node_modules ../out/ && cp -r views ../out/",
     "start": "npm run copy && npm run tsc && node ../out/App.js ",
     "tsc": "tsc"
@@ -13,7 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "@types/body-parser": "^1.19.0",
+    "@types/chai": "^4.2.11",
     "@types/express": "^4.17.6",
+    "@types/mocha": "^7.0.2",
     "@types/mongoose": "^5.7.29",
     "@types/mysql": "^2.15.14",
     "body-parser": "^1.19.0",
@@ -21,5 +23,9 @@
     "mongoose": "^5.9.21",
     "mysql": "^2.18.1",
     "typescript": "^3.9.5"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1"
   }
 }

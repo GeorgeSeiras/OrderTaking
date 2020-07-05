@@ -22,9 +22,4 @@ export class table {
     public async getAllTables(){
       return TableModel.find({}).sort('tableID');
     }
-
-
-    
 }
-
-  
